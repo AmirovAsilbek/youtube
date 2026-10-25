@@ -1,17 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        html, iframe { width: 100%; height: 100%; border: none; margin: 0; overflow: hidden; background: #000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Roboto, Arial, sans-serif; }
+        body { background-color: #0f0f0f; color: #fff; padding: 10px; }
+        .header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: bold; font-size: 18px; color: #ff0000; }
+        .search-box { display: flex; gap: 8px; margin-bottom: 12px; }
+        input { flex: 1; padding: 10px 14px; border-radius: 20px; border: 1px solid #333; background: #212121; color: #fff; font-size: 14px; outline: none; }
+        button { padding: 10px 16px; border-radius: 20px; border: none; background: #ff0000; color: #fff; font-weight: bold; cursor: pointer; }
+        .player-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 15px; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .section-title { font-size: 14px; color: #aaa; margin-bottom: 8px; }
+        .video-list { display: flex; flex-direction: column; gap: 10px; }
+        .video-card { display: flex; gap: 10px; background: #181818; padding: 8px; border-radius: 8px; cursor: pointer; align-items: center; }
+        .video-card img { width: 110px; height: 62px; border-radius: 6px; object-fit: cover; }
+        .video-title { font-size: 13px; font-weight: 500; line-height: 1.2; }
     </style>
 </head>
-<iframe src="https://m.youtube.com"></iframe>
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-</script>
+<body>
+
+    <div class="header">
+        <span>▶ YouTube App</span>
+    </div>
+
+    <!-- Havola kiritib ochish -->
+    <div class="search-box">
+        <input type="text" id="urlInput" placeholder="YouTube video havolasini yuboring...">
+        <button onclick="loadVideo()">Ochish</button>
+    </div>
+
+    <!-- Pleyer oynamiz -->
+    <div class="player-container">
+        <iframe id="ytPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+    </div>
+
+    <div class="section-title">Tavsiya etilgan videolar</div>
+
+    <!-- Tayyor videolar ro'yxati -->
+    <div class="video-list">
+        <div class="video-card" onclick="play('dQw4w9WgXcQ')">
+            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="">
+            <div class="video-title">Never Gonna Give You Up - Rick Astley</div>
+        </div>
+        <div class="video-card" onclick="play('kJQP7kiw5Fk')">
+            <img src="https://img.youtube.com/vi/kJQP7kiw5Fk/hqdefault.jpg" alt="">
+            <div class="video-title">Luis Fonsi - Despacito ft. Daddy Yankee</div>
+        </div>
+        <div class="video-card" onclick="play('L_LUpnjgPso')">
+            <img src="https://img.youtube.com/vi/L_LUpnjgPso/hqdefault.jpg" alt="">
+            <div class="video-title">Relaxing Lofi Music Mix</div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        function play(id) {
+            document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+        }
+
+        function loadVideo() {
+            let val = document.getElementById('urlInput').value.trim();
+            let id = '';
+            if (val.includes('v=')) {
+                id = val.split('v=')[1].split('&')[0];
+            } else if (val.includes('youtu.be/')) {
+                id = val.split('youtu.be/')[1].split('?')[0];
+            }
+            if (id.length === 11) {
+                play(id);
+            } else {
+                alert("Iltimos, to'g'ri YouTube havolasini kiriting!");
+            }
+        }
+    </script>
+</body>
 </html>
